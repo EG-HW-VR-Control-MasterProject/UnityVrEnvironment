@@ -22,3 +22,9 @@ SteamVR_Windows_EditorHelper.csproj
 SteamVR.csproj
 
 *.csproj
+
+.vs/
+
+UnityVrEnvironment.sln
+
+unityProject.vrmanifest
