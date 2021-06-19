@@ -19,7 +19,9 @@ public class LineRendererSettings : MonoBehaviour
     public Button btn;
     public SteamVR_Input_Sources handType;
     public SteamVR_Action_Boolean grabAction;
+    public SteamVR_Action_Boolean showButtonMenuAction;
     public SteamVR_Behaviour_Pose controllerPose;
+    public Canvas ButtonMenuVR;
 
     //Start is called before the first frame update
     void Start()
@@ -41,8 +43,10 @@ public class LineRendererSettings : MonoBehaviour
         rend.SetPositions(points);    
         rend.enabled = true;
 
+        // Hide the Button menu by default
+        ButtonMenuVR.enabled = false;
         //img = panel.GetComponent<Image>();
-        
+
     }
 
     public LayerMask layerMask;
@@ -101,18 +105,30 @@ public class LineRendererSettings : MonoBehaviour
     {
         return grabAction.GetState(handType);
     }
-
+    public bool GetButtonMenu()
+    {
+        return showButtonMenuAction.GetState(handType);
+    }
     // Update is called once per frame
     void Update()
     {
+        
         AlignLineRenderer(rend);
+
+
         if (GetGrab())
         {
             print("Grab " + handType);
             
         }
+
+        if (GetButtonMenu())
+        {
+            print("Disp Menu");
+            ButtonMenuVR.enabled = !ButtonMenuVR.enabled;
+        }
         //if (AlignLineRenderer(rend) && GetGrab()) {
-        if (GetGrab()) {
+        if (GetGrab() && (ButtonMenuVR.enabled == true)) {
             print("Button pushed");
             btn.onClick.Invoke(); 
         }

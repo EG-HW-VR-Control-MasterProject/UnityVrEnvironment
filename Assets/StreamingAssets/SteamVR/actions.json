@@ -69,6 +69,10 @@
       "type": "boolean"
     },
     {
+      "name": "/actions/default/in/ShowButtonMenu",
+      "type": "boolean"
+    },
+    {
       "name": "/actions/default/out/Haptic",
       "type": "vibration"
     }
@@ -151,7 +155,8 @@
       "/actions/default/in/RightDpad": "RightDpad",
       "/actions/default/in/PressTrackPad": "PressTrackPad",
       "/actions/default/in/TrackPadPosition": "TrackPadPosition",
-      "/actions/default/in/TouchTrackPad": "TouchTrackPad"
+      "/actions/default/in/TouchTrackPad": "TouchTrackPad",
+      "/actions/default/in/ShowButtonMenu": "ShowButtonMenu"
     }
   ]
 }
