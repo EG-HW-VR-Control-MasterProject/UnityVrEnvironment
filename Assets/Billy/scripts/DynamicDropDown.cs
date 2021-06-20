@@ -78,7 +78,7 @@ public class DynamicDropDown : MonoBehaviour
 			if (listIndex < 0)
 			{
 				print("Reset counter");
-				listIndex = dropdown.options.Count;
+				listIndex = dropdown.options.Count - 1;
 			}
 
 			dropdown.value = listIndex;
@@ -86,23 +86,15 @@ public class DynamicDropDown : MonoBehaviour
 		}
 		padTouchStatePrev = padTouchState;
 		//print(padTouchState);
-
+		/*
 		grabState = GetGrab();
 		if (grabState != grabStatePrev && grabState == true)
 		{
-			/*
-			counter = counter + (int)scroll_item;
-            if (counter >= dropdown.options.Count)
-            {
-				print("Reset counter");
-				counter = 0;
-            }
-			dropdown.value = counter;
-			*/
+			
 			counter++;
 			dropdown.options.Add(new Dropdown.OptionData() { text = "Choice "+ counter.ToString() });
 		}
 		grabStatePrev = grabState;
-
+		*/
 	}
 }

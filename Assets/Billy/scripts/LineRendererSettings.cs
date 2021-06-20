@@ -23,6 +23,8 @@ public class LineRendererSettings : MonoBehaviour
     public SteamVR_Behaviour_Pose controllerPose;
     public Canvas ButtonMenuVR;
 
+    public bool buttonMenuState;
+    public bool buttonMenuStatePrev;
     //Start is called before the first frame update
     void Start()
     {
@@ -115,18 +117,20 @@ public class LineRendererSettings : MonoBehaviour
         
         AlignLineRenderer(rend);
 
-
+        buttonMenuState = GetButtonMenu();
         if (GetGrab())
         {
             print("Grab " + handType);
             
         }
 
-        if (GetButtonMenu())
+        if (buttonMenuState != buttonMenuStatePrev && buttonMenuState == true)
         {
+            
             print("Disp Menu");
             ButtonMenuVR.enabled = !ButtonMenuVR.enabled;
         }
+        buttonMenuStatePrev = buttonMenuState;
         //if (AlignLineRenderer(rend) && GetGrab()) {
         if (GetGrab() && (ButtonMenuVR.enabled == true)) {
             print("Button pushed");
