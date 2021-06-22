@@ -23,6 +23,11 @@ public class LineRendererSettings : MonoBehaviour
     public SteamVR_Behaviour_Pose controllerPose;
     public Canvas ButtonMenuVR;
 
+    public Button teleopButton;
+    public Button autonomButton;
+    public int selectedMode;
+
+
     public bool buttonMenuState;
     public bool buttonMenuStatePrev;
     //Start is called before the first frame update
@@ -47,6 +52,7 @@ public class LineRendererSettings : MonoBehaviour
 
         // Hide the Button menu by default
         ButtonMenuVR.enabled = false;
+        rend.enabled = false;
         //img = panel.GetComponent<Image>();
 
     }
@@ -91,15 +97,26 @@ public class LineRendererSettings : MonoBehaviour
     public void ColorChangeOnClick()
     {
         if (btn != null) { 
-            if (btn.name == "red_button") {
-                btn.image.color = Color.red; 
-            } 
-            else if (btn.name == "blue_button") {
-                btn.image.color = Color.blue; 
-            } 
+            if (btn.name == "teleoperationButton") {
+                //btn.image.color = Color.red;
+                teleopButton.image.color = Color.red;
+                autonomButton.image.color = Color.white;
+
+                selectedMode = 0;
+
+            }
+            else if (btn.name == "AutonomousButton") {
+                //btn.image.color = Color.blue;
+                teleopButton.image.color = Color.white;
+                autonomButton.image.color = Color.blue;
+
+                selectedMode = 1;
+            }
+            /*
             else if (btn.name == "green_button") {
                 btn.image.color = Color.green; 
-            } 
+            }
+            */
         }
     }
 
@@ -129,6 +146,7 @@ public class LineRendererSettings : MonoBehaviour
             
             print("Disp Menu");
             ButtonMenuVR.enabled = !ButtonMenuVR.enabled;
+            rend.enabled = !rend.enabled;
         }
         buttonMenuStatePrev = buttonMenuState;
         //if (AlignLineRenderer(rend) && GetGrab()) {
