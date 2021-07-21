@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 using Valve.VR;
-public class DynamicDropDown : MonoBehaviour
+using RosSharp.RosBridgeClient;
+
+public class DropDownSubscriberUpdated : MonoBehaviour
 {
 	public Text TextBox;
 	public SteamVR_Input_Sources handType;
@@ -23,17 +25,15 @@ public class DynamicDropDown : MonoBehaviour
 	public int counter;
 	public bool grabState;
 	public bool grabStatePrev;
+
+	public GameObject RosItemListSubscriber;
+
+	public List<string> previousItemList;
 	// Use this for initialization
 	void Start()
 	{
-		
+
 		dropdown.options.Clear();
-		/*
-		List<string> items = new List<string>();
-		items.Add("Item 1");
-		items.Add("Item 2");
-		items.Add("Item 3");
-		*/
 		string textArray = "Item1-Item2-Item3";
 		string[] splitArray = textArray.Split(char.Parse("-"));
 		List<string> items = new List<string>();
@@ -42,15 +42,18 @@ public class DynamicDropDown : MonoBehaviour
 		{
 			items.Add(splitArray[index]);
 		}
+		previousItemList = items;
 		// Fill dropdown with items
+		/*
 		foreach (var item in items)
-        {
+		{
 			dropdown.options.Add(new Dropdown.OptionData() { text = item });
-        }
+		}
+		*/
 		DropdownItemSelected(dropdown);
 		dropdown.onValueChanged.AddListener(
 			delegate {
-				DropdownItemSelected(dropdown); 
+				DropdownItemSelected(dropdown);
 			}
 		);
 	}
@@ -60,23 +63,47 @@ public class DynamicDropDown : MonoBehaviour
 	}
 
 	void DropdownItemSelected(Dropdown dropdown)
-    {
-			int index = dropdown.value;
-			TextBox.text = dropdown.options[index].text;
+	{
+		int index = dropdown.value;
+		TextBox.text = dropdown.options[index].text;
 
-    }
+	}
+
+	bool CheckMatch(List<string> l1, List<string> l2)
+	{
+		if (l1.Count != l2.Count)
+			return false;
+		for (int i = 0; i < l1.Count; i++)
+		{
+			if (l1[i] != l2[i])
+				return false;
+		}
+		return true;
+	}
+
 	void Update()
-    {
+	{
+		StringItemListSubscriber itemListSubscriber = RosItemListSubscriber.GetComponent<StringItemListSubscriber>();
 		padTouchState = TouchTrackPadActionBoolean.GetState(handType);
+		
+		if(!CheckMatch(previousItemList, itemListSubscriber.items))
+        {
+			dropdown.options.Clear();
+			foreach (var item in itemListSubscriber.items)
+			{
+				dropdown.options.Add(new Dropdown.OptionData() { text = item });
+			}
+		}
+		
 		//if button pressed
 		if (padTouchState != padTouchStatePrev && padTouchState == true)
 		{
 			// Take the values
-			scroll_item = TrackPadActionVector2.GetAxis(handType).y *10;
+			scroll_item = TrackPadActionVector2.GetAxis(handType).y * 10;
 			print(scroll_item);
 			// Limite the speeds
 			scroll_item = (-Mathf.Clamp(scroll_item, -1.5f, 1.5f));
-			
+
 			print(scroll_item);
 			listIndex = listIndex + (int)scroll_item;
 			if (listIndex >= dropdown.options.Count)
@@ -91,20 +118,9 @@ public class DynamicDropDown : MonoBehaviour
 			}
 
 			dropdown.value = listIndex;
-			
+
 		}
 		padTouchStatePrev = padTouchState;
-		
-		//print(padTouchState);
-		/*
-		grabState = GetGrab();
-		if (grabState != grabStatePrev && grabState == true)
-		{
-			
-			counter++;
-			dropdown.options.Add(new Dropdown.OptionData() { text = "Choice "+ counter.ToString() });
-		}
-		grabStatePrev = grabState;
-		*/
+		previousItemList = itemListSubscriber.items;
 	}
 }
