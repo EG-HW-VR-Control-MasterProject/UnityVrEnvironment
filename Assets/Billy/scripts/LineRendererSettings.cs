@@ -99,6 +99,7 @@ public class LineRendererSettings : MonoBehaviour
         if (btn != null) { 
             if (btn.name == "teleoperationButton") {
                 //btn.image.color = Color.red;
+                print("telop pushed");
                 teleopButton.image.color = Color.red;
                 autonomButton.image.color = Color.white;
 
